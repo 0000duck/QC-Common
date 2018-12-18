@@ -34,7 +34,9 @@ namespace QuantumConcepts.Common.Zip
                             }
                         }
                         else
+                        {
                             Directory.CreateDirectory(basePath + currentEntry.Name);
+                        }
                     }
                 } while (currentEntry != null);
             }
@@ -64,10 +66,12 @@ namespace QuantumConcepts.Common.Zip
 
         public static ZipInputStream OpenZip(Stream inputStream, string password = null)
         {
-            ZipInputStream zipStream = new ZipInputStream(inputStream);
+            var zipStream = new ZipInputStream(inputStream);
 
             if (!string.IsNullOrEmpty(password))
+            {
                 zipStream.Password = password;
+            }
 
             return zipStream;
         }

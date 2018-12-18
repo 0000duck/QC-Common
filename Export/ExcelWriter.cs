@@ -91,7 +91,9 @@ namespace QuantumConcepts.Common.Export
 
             //Write the column headers, if any.
             if (!headers.IsNullOrEmpty())
+            {
                 WriteLine(headers);
+            }
         }
 
         /// <summary>Writes the values to the document.</summary>
@@ -102,8 +104,9 @@ namespace QuantumConcepts.Common.Export
             if (this.MaximumRowsPerSheet == this.RowsInCurrentSheet)
             {
                 this.SectionSubsheet++;
-                this.EndPage();
-                this.BeginPage(this.SectionName + " " + this.SectionSubsheet.ToString(), this.Headers);
+
+                EndPage();
+                BeginPage(this.SectionName + " " + this.SectionSubsheet.ToString(), this.Headers);
             }
 
             //Create a new row and set its RowIndex.
@@ -144,7 +147,8 @@ namespace QuantumConcepts.Common.Export
 
             this.Document.Close();
             this.Document.Dispose();
-            this.Dispose();
+
+            Dispose();
         }
 
         /// <summary>Converts a column number (5) to its respective alpha column name (E).</summary>
@@ -171,7 +175,9 @@ namespace QuantumConcepts.Common.Export
 
             //If charIndex is 0, that means "Z."
             if (charIndex == 0)
+            {
                 charIndex = charCount;
+            }
 
             //Move the charIndex to the alpha portion of ASCII and cast to a char.
             column = ((char)(charIndex + (charIndexA - 1))).ToString();
@@ -183,7 +189,9 @@ namespace QuantumConcepts.Common.Export
             //If we haven't reached the end (charIndex is still positive) then call this method
             //again and prefix the result.
             if (charIndex > 0)
+            {
                 column = (GetColumnNameFromNumber(charIndex) + column);
+            }
 
             return column;
         }
