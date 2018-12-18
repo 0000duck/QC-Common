@@ -246,7 +246,6 @@
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="DataObjects\DeleteConflictException.cs" />
     <Compile Include="DataObjects\IDataObject.cs" />
-    <Compile Include="Debug\OperationTimer.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Export\CommaDelimitedWriter.cs" />
     <Compile Include="Export\DataReaderExportDataSource.cs" />
