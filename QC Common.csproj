@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netcoreapp2.2;net472</TargetFrameworks>
     <RootNamespace>QC_Common</RootNamespace>
   </PropertyGroup>
 

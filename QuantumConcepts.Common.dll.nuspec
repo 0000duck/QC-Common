@@ -1,23 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-    <metadata>
-        <id>QuantumConcepts.Common</id>
-        <version>1.2.1</version>
-        <title>QC Common</title>
-        <authors>QuantumConcepts</authors>
-        <owners>QuantumConcepts</owners>
-        <licenseUrl>http://www.gnu.org/licenses/agpl-3.0.html</licenseUrl>
-        <projectUrl>http://quantumconceptscorp.com</projectUrl>
-        <iconUrl>http://quantumconceptscorp.com/Resources/Images/QCLogoButton-32.png</iconUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Contains common functionality used by other Quantum Concepts assemblies.</description>
-        <releaseNotes />
-        <copyright>© QuantumConcepts, released under the GNU Affero General Public License.</copyright>
-        <language>en-US</language>
-        <tags>cache,data,datamodel,debug,export,extension,import,io,model,mvc,network,oauth,search,security,encryption,test,util,zip,archive</tags>
-    </metadata>
-    <files>
-        <file src="bin\Release\QuantumConcepts.Common.dll" target="lib\net40\QuantumConcepts.Common.dll" />
-        <file src="bin\Release\QuantumConcepts.Common.pdb" target="lib\net40\QuantumConcepts.Common.pdb" />
-    </files>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>QuantumConcepts.Common</id>
+    <version>2.0.0</version>
+    <title>QC Common</title>
+    <authors>QuantumConcepts</authors>
+    <owners>QuantumConcepts</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://www.gnu.org/licenses/agpl-3.0.html</licenseUrl>
+    <projectUrl>http://quantumconceptscorp.com/</projectUrl>
+    <iconUrl>http://quantumconceptscorp.com/Resources/Images/QCLogoButton-32.png</iconUrl>
+    <description>Contains common functionality used by other Quantum Concepts assemblies.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>© QuantumConcepts, released under the GNU Affero General Public License.</copyright>
+    <language>en-US</language>
+    <tags>cache,data,datamodel,debug,export,extension,import,io,model,mvc,network,oauth,search,security,encryption,test,util,zip,archive</tags>
+  </metadata>
+  <files>
+    <file src="lib\net472\QuantumConcepts.Common.dll" target="lib\net472\QuantumConcepts.Common.dll" />
+    <file src="lib\net472\QuantumConcepts.Common.pdb" target="lib\net472\QuantumConcepts.Common.pdb" />
+    <file src="lib\netcoreapp2.2\QuantumConcepts.Common.dll" target="lib\netcoreapp2.2\QuantumConcepts.Common.dll" />
+    <file src="lib\netcoreapp2.2\QuantumConcepts.Common.pdb" target="lib\netcoreapp2.2\QuantumConcepts.Common.pdb" />
+  </files>
 </package>
