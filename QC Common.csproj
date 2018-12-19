@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.2;net472</TargetFrameworks>
-    <RootNamespace>QC_Common</RootNamespace>
+    <RootNamespace>QuantumConcepts.Common</RootNamespace>
+    <AssemblyName>QuantumConcepts.Common</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
