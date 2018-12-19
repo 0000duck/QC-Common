@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Collections;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace QuantumConcepts.Common.Cache

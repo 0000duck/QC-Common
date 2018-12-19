@@ -1,21 +1,15 @@
+using QuantumConcepts.Common.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Collections;
-using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.IO;
-using log4net;
-using QuantumConcepts.Common.Extensions;
 
 namespace QuantumConcepts.Common.Cache
 {
     /// <summary>This class keeps track of all cache objects.</summary>
     public class CacheManager
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(CacheManager));
-
         public static CacheManager Instance { get; private set; }
 
         protected List<ICache> Caches { get; set; }
@@ -70,7 +64,7 @@ namespace QuantumConcepts.Common.Cache
                 }
                 catch (Exception ex)
                 {
-                    CacheManager.Logger.Error("While loading batch processors, could not load assembly \"{0}\".".FormatString(file), ex);
+                    throw new TypeLoadException("While registering caches, could not load assembly \"{0}\".".FormatString(file), ex);
                 }
 
                 RegisterAllCaches(assembly);
@@ -98,7 +92,7 @@ namespace QuantumConcepts.Common.Cache
                             }
                             catch (Exception ex)
                             {
-                                CacheManager.Logger.Error("While loading batch processors, could not instantiate type \"{0}\".".FormatString(type.FullName), ex);
+                                throw new TypeLoadException("While creating cache instance, could not instantiate type \"{0}\".".FormatString(type.FullName), ex);
                             }
 
                             if (instance != null)

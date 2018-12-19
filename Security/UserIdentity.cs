@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using QuantumConcepts.Common.DataObjects;
+using System;
 using System.Linq;
-using System.Text;
 using System.Security.Principal;
-using System.Data.Linq;
-using QuantumConcepts.Common.DataObjects;
 
 namespace QuantumConcepts.Common.Security
 {
@@ -31,16 +28,26 @@ namespace QuantumConcepts.Common.Security
             U user = GetUserByEmailAddress(context, emailAddress);
 
             if (user == null)
+            {
                 throw new ApplicationException("Invalid email address and/or password.");
+            }
             else if (!user.IsActive())
+            {
                 throw new ApplicationException("The account has not been activated.");
+            }
             else if (user.IsDenied())
+            {
                 throw new ApplicationException("Invalid email address and/or password.");
+            }
             else if (user.IsDisabled())
+            {
                 throw new ApplicationException("The account has been disabled.");
+            }
 
             if (!TryAuthenticate(encryptionUtil, user, password))
+            {
                 throw new ApplicationException("Invalid email address and/or password.");
+            }
 
             this.DataContext = context;
             this.User = user;
@@ -50,8 +57,10 @@ namespace QuantumConcepts.Common.Security
         {
             try
             {
-                if (user == null || !user.IsActive() || !object.Equals(encryptionUtil.DecryptTextViaRijndael(user.PasswordEncrypted.ToArray(), user.EncryptionVector.ToArray()), password))
+                if (user == null || !user.IsActive() || !Equals(encryptionUtil.DecryptTextViaRijndael(user.PasswordEncrypted.ToArray(), user.EncryptionVector.ToArray()), password))
+                {
                     return false;
+                }
 
                 return true;
             }

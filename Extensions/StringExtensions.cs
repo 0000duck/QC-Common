@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -9,8 +8,6 @@ using System.Text.RegularExpressions;
 namespace QuantumConcepts.Common.Extensions {
     public static class StringExtensions
     {
-        private static Lazy<PluralizationService> PluralizationService { get; } = new Lazy<PluralizationService>(() => System.Data.Entity.Design.PluralizationServices.PluralizationService.CreateService(CultureInfo.CurrentCulture));
-
         /// <summary>Determines if both strings are equal, regardless of case.</summary>
         public static bool EqualsIgnoreCase(this string a, string b)
         {
@@ -25,19 +22,23 @@ namespace QuantumConcepts.Common.Extensions {
         public static void Parse(this List<string> strings, string keywords)
         {
             if (string.IsNullOrEmpty(keywords))
+            {
                 return;
+            }
 
             string[] strKeywords = keywords.Split(',');
 
             strings.Clear();
 
-            foreach (string str in strKeywords)
+            foreach (var str in strKeywords)
+            {
                 strings.Add(str);
+            }
         }
 
         public static string TryTrim(this string value)
         {
-            return (value == null ? null : value.Trim());
+            return value?.Trim();
         }
 
         public static string ToCommaDelimitedString(this List<string> strings)
@@ -66,7 +67,9 @@ namespace QuantumConcepts.Common.Extensions {
         public static bool IsContainedWithinAny(this string textToFind, params string[] textToSearch)
         {
             if (textToFind == null || textToSearch == null)
+            {
                 return false;
+            }
 
             return textToSearch.Any(s => textToFind.IsContainedWithin(s));
         }
@@ -74,29 +77,19 @@ namespace QuantumConcepts.Common.Extensions {
         public static bool IsContainedWithinAll(this string textToFind, params string[] textToSearch)
         {
             if (textToFind == null || textToSearch == null)
+            {
                 return false;
+            }
 
             return textToSearch.All(s => textToFind.IsContainedWithin(s));
-        }
-
-        /// <summary>Returns the plural form of the provided word.</summary>
-        /// <param name="word">The word to pluralize.</param>
-        /// <returns>A string representation of the plural form of the provided word.</returns>
-        public static string Pluralize(this string word) {
-            return PluralizationService.Value.Pluralize(word);
-        }
-
-        /// <summary>Returns the singular form of the provided word.</summary>
-        /// <param name="word">The word to singularize.</param>
-        /// <returns>A string representation of the singular form of the provided word.</returns>
-        public static string Singularize(this string word) {
-            return PluralizationService.Value.Singularize(word);
         }
 
         public static string StripHtml(this string text)
         {
             if (text.IsNullOrEmpty())
+            {
                 return null;
+            }
 
             return Regex.Replace(text, "\\<[^>]+>", "");
         }
@@ -120,16 +113,22 @@ namespace QuantumConcepts.Common.Extensions {
         public static string TrimTextBlock(this string text, int length, bool breakOnWholeWord, GetStringValueDelegate moreLinkDelegate)
         {
             if (string.IsNullOrEmpty(text) || text.Length <= length)
+            {
                 return text;
+            }
             else
             {
                 int trimLength = (breakOnWholeWord ? text.IndexOf(" ", length) : length);
                 string trimmedText = null;
 
                 if (trimLength < 0 || trimLength > text.Length)
+                {
                     trimmedText = text;
+                }
                 else
+                {
                     trimmedText = text.Substring(0, trimLength);
+                }
 
                 return "{0}...{1}".FormatString(trimmedText, (moreLinkDelegate == null ? "" : moreLinkDelegate()));
             }

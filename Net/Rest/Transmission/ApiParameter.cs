@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using QuantumConcepts.Common.Extensions;
 using QuantumConcepts.Common.Utils;
@@ -21,7 +22,7 @@ namespace QuantumConcepts.Common.Net.Rest.Transmission
 
         public static ApiParameter Create(string key, object value)
         {
-            return new ApiParameter(key, (value == null ? null : value.ToString()));
+            return new ApiParameter(key, value?.ToString());
         }
 
         public static ApiParameter Create(string key, int? value)
@@ -83,7 +84,7 @@ namespace QuantumConcepts.Common.Net.Rest.Transmission
         public override string ToString()
         {
             if (!string.IsNullOrEmpty(this.Key) && !string.IsNullOrEmpty(this.Value))
-                return (this.Key + "=" + UrlUtil.UrlEncode(this.Value));
+                return (this.Key + "=" + WebUtility.UrlEncode(this.Value));
 
             return "";
         }

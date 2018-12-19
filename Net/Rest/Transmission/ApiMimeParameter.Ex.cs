@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Drawing.Imaging;
-using System.Drawing;
+﻿using System.IO;
 
 namespace QuantumConcepts.Common.Net.Rest.Transmission
 {
     public partial class ApiMimeParameter
 	{
-        public static ApiMimeParameter Create(string name, Image image)
+        public static ApiMimeParameter Create(string name, string mimeType, Stream stream)
         {
-            using (MemoryStream stream = new MemoryStream())
+            using (var memoryStream = new MemoryStream())
             {
-                image.Save(stream, ImageFormat.Png);
+                stream.CopyTo(memoryStream);
 
-                return new ApiMimeParameter(name, "image/png", stream.ToArray());
+                return new ApiMimeParameter(name, mimeType, memoryStream.ToArray());
             }
         }
 	}

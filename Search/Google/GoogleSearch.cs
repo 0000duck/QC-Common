@@ -1,16 +1,10 @@
-﻿using System;
+﻿using QuantumConcepts.Common.Utils;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Policy;
-using System.Xml;
 using System.Net;
-using QuantumConcepts.Common.Utils;
-using System.Reflection;
-using QuantumConcepts.Common.Exceptions;
-using System.Web;
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
-using System.IO;
 
 namespace QuantumConcepts.Common.Search.Google
 {
@@ -19,23 +13,6 @@ namespace QuantumConcepts.Common.Search.Google
         private static List<MappedProperty> MAPPED_PROPERTIES = new List<MappedProperty>();
         private const string BASE_URL = "http://www.google.com/search?";
         private const string CLIENT = "google-csbe";
-
-        private bool _simplifiedAndTraditionalChineseSearch;
-        private ParameterValueGroup _countries = new ParameterValueGroup();
-        private string _context;
-        private bool _filter = true;
-        private string _countryBoost;
-        private string _hostLanguage = "en";
-        private string _querystringCharacterEncoding = "latin1";
-        private string _languageRestriction;
-        private int _pageNumber = 1;
-        private int _pageSize = 10;
-        private string _xmlCharacterEnoding = "latin1";
-        private OutputFormat _outputFormat = OutputFormat.XmlNoDtd;
-        private string _query;
-        private SafeSearchMode _safeSearchMode = SafeSearchMode.Off;
-        private bool _idnEncodeUrls = false;
-        private List<SearchResult> _results;
 
         public static string BaseUrl
         {
@@ -47,101 +24,37 @@ namespace QuantumConcepts.Common.Search.Google
             get { return GoogleSearch.CLIENT; }
         }
 
-        public bool SimplifiedAndTraditionalChineseSearch
-        {
-            get { return _simplifiedAndTraditionalChineseSearch; }
-            set { _simplifiedAndTraditionalChineseSearch = value; }
-        }
+        public bool SimplifiedAndTraditionalChineseSearch { get; set; }
 
-        public ParameterValueGroup Countries
-        {
-            get { return _countries; }
-            set { _countries = value; }
-        }
+        public ParameterValueGroup Countries { get; set; } = new ParameterValueGroup();
 
-        public string Context
-        {
-            get { return _context; }
-            set { _context = value; }
-        }
+        public string Context { get; set; }
 
-        public bool Filter
-        {
-            get { return _filter; }
-            set { _filter = value; }
-        }
+        public bool Filter { get; set; } = true;
 
-        public string CountryBoost
-        {
-            get { return _countryBoost; }
-            set { _countryBoost = value; }
-        }
+        public string CountryBoost { get; set; }
 
-        public string HostLanguage
-        {
-            get { return _hostLanguage; }
-            set { _hostLanguage = value; }
-        }
+        public string HostLanguage { get; set; } = "en";
 
-        public string QuerystringCharacterEncoding
-        {
-            get { return _querystringCharacterEncoding; }
-            set { _querystringCharacterEncoding = value; }
-        }
+        public string QuerystringCharacterEncoding { get; set; } = "latin1";
 
-        public string LanguageRestriction
-        {
-            get { return _languageRestriction; }
-            set { _languageRestriction = value; }
-        }
+        public string LanguageRestriction { get; set; }
 
-        public int PageNumber
-        {
-            get { return _pageNumber; }
-            set { _pageNumber = value; }
-        }
+        public int PageNumber { get; set; } = 1;
 
-        public int PageSize
-        {
-            get { return _pageSize; }
-            set { _pageSize = value; }
-        }
+        public int PageSize { get; set; } = 10;
 
-        public string XmlCharacterEnoding
-        {
-            get { return _xmlCharacterEnoding; }
-            set { _xmlCharacterEnoding = value; }
-        }
+        public string XmlCharacterEnoding { get; set; } = "latin1";
 
-        public OutputFormat OutputFormat
-        {
-            get { return _outputFormat; }
-            set { _outputFormat = value; }
-        }
+        public OutputFormat OutputFormat { get; set; } = OutputFormat.XmlNoDtd;
 
-        public string Query
-        {
-            get { return _query; }
-            set { _query = value; }
-        }
+        public string Query { get; set; }
 
-        public SafeSearchMode SafeSearchMode
-        {
-            get { return _safeSearchMode; }
-            set { _safeSearchMode = value; }
-        }
+        public SafeSearchMode SafeSearchMode { get; set; } = SafeSearchMode.Off;
 
-        public bool IdnEncodeUrls
-        {
-            get { return _idnEncodeUrls; }
-            set { _idnEncodeUrls = value; }
-        }
+        public bool IdnEncodeUrls { get; set; } = false;
 
-        public List<SearchResult> Results
-        {
-            get { return _results; }
-            set { _results = value; }
-        }
+        public List<SearchResult> Results { get; set; }
 
         static GoogleSearch()
         {
@@ -169,7 +82,7 @@ namespace QuantumConcepts.Common.Search.Google
 
         public GoogleSearch(string query)
         {
-            _query = query;
+            Query = query;
         }
 
         public SearchResponse GetResponse()
@@ -177,10 +90,10 @@ namespace QuantumConcepts.Common.Search.Google
             WebClient webClient = new WebClient();
             XmlSerializer serializer = serializer = new XmlSerializer(typeof(SearchResponse));
             SearchResponse searchResponse = null;
-            int realPageNumber = _pageNumber;
-            int realPageSize = _pageSize;
-            int startIndex = ((_pageNumber - 1) * _pageSize);
-            int endIndex = ((_pageSize * _pageNumber) - 1);
+            int realPageNumber = PageNumber;
+            int realPageSize = PageSize;
+            int startIndex = ((PageNumber - 1) * PageSize);
+            int endIndex = ((PageSize * PageNumber) - 1);
 
             for (int i = startIndex; i <= endIndex; i += 10)
             {
@@ -191,8 +104,8 @@ namespace QuantumConcepts.Common.Search.Google
                 XmlNodeReader reader = null;
                 SearchResponse thisSearchResponse = null;
 
-                _pageNumber = i;
-                _pageSize = Math.Min(10, endIndex - startIndex);
+                PageNumber = i;
+                PageSize = Math.Min(10, endIndex - startIndex);
 
                 url = BuildUrl();
                 data = webClient.DownloadData(url.ToString());
@@ -218,8 +131,8 @@ namespace QuantumConcepts.Common.Search.Google
                     break;
             }
 
-            _pageNumber = realPageNumber;
-            _pageSize = realPageSize;
+            PageNumber = realPageNumber;
+            PageSize = realPageSize;
 
             if (searchResponse == null)
                 return new SearchResponse();

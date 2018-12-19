@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using QuantumConcepts.Common.DataObjects;
 using System.Linq;
-using System.Text;
 using System.Security.Principal;
-using System.Data.Linq;
-using QuantumConcepts.Common.DataObjects;
 
 namespace QuantumConcepts.Common.Security
 {

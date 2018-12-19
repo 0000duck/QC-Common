@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
-using System.Web.UI;
-using System.Text.RegularExpressions;
-using System.Web;
 
 namespace QuantumConcepts.Common.Utils
 {
@@ -14,7 +11,6 @@ namespace QuantumConcepts.Common.Utils
         protected string _name = null;
         protected bool _requireSecurity = false;
         protected string _relativeUrl = null;
-        protected string _absoluteUrl = null;
 
         public ResourceUrl ParentUrl { get { return _parentUrl; } }
         public bool RequireSecurity { get { return _requireSecurity; } }
@@ -26,20 +22,11 @@ namespace QuantumConcepts.Common.Utils
             get
             {
                 if (string.IsNullOrEmpty(_relativeUrl))
+                {
                     SetRelativeUrl();
+                }
 
                 return _relativeUrl;
-            }
-        }
-
-        public string AbsoluteUrl
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_absoluteUrl))
-                    SetAbsoluteUrl();
-
-                return _absoluteUrl;
             }
         }
 
@@ -59,19 +46,6 @@ namespace QuantumConcepts.Common.Utils
         private void SetRelativeUrl()
         {
             _relativeUrl = (_parentUrl == null ? "" : _parentUrl.RelativeUrl + "/") + _name;
-        }
-
-        public string GetAbsoluteUrl(Control control)
-        {
-            return UrlUtil.GetAbsoluteUrl(RelativeUrl, control);
-        }
-
-        private void SetAbsoluteUrl()
-        {
-            _absoluteUrl = GetAbsoluteUrl(null);
-
-            if (_requireSecurity && SSLEnabled)
-                _absoluteUrl = Regex.Replace(_absoluteUrl, "^http://", "https://");
         }
 
         public string FormatUrl(params UrlParameter[] parameters)
@@ -105,20 +79,10 @@ namespace QuantumConcepts.Common.Utils
         {
             return FormatUrl(this.RelativeUrl, parameters);
         }
-
-        public string FormatAbsoluteUrl(UrlParameterList parameters)
-        {
-            return FormatUrl(this.AbsoluteUrl, parameters);
-        }
-
-        public void Redirect()
-        {
-            HttpContext.Current.Response.Redirect(this.AbsoluteUrl);
-        }
-
+        
         public override string ToString()
         {
-            return this.AbsoluteUrl;
+            return this.RelativeUrl;
         }
 
         protected virtual bool SSLEnabled { get { return false; } }
@@ -155,7 +119,9 @@ namespace QuantumConcepts.Common.Utils
             parameterString.Append("=");
 
             if (!string.IsNullOrEmpty(this.Value))
-                parameterString.Append(HttpContext.Current.Server.UrlEncode(this.Value));
+            {
+                parameterString.Append(WebUtility.UrlEncode(this.Value));
+            }
 
             return parameterString.ToString();
         }

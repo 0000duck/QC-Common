@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Configuration;
-using QuantumConcepts.Common.Extensions;
+﻿using QuantumConcepts.Common.Extensions;
+using System;
 using System.Collections.Specialized;
 
 namespace QuantumConcepts.Common.Utils
@@ -13,53 +9,32 @@ namespace QuantumConcepts.Common.Utils
     public class ConfigUtil
     {
         public static ConfigUtil Instance { get; private set; }
-        
+
         public NameValueCollection AppSettings { get; }
-        public ConnectionStringSettingsCollection ConnectionStrings { get; }
 
-        static ConfigUtil()
-        {
-            ConfigUtil.Instance = new ConfigUtil();
-        }
-
-        protected ConfigUtil() : this(ConfigurationManager.AppSettings, ConfigurationManager.ConnectionStrings) { }
-
-        public ConfigUtil(NameValueCollection appSettings, ConnectionStringSettingsCollection connectionStrings) {
-            if (appSettings == null)
-                throw new ArgumentNullException(nameof(appSettings));
-
-            if (connectionStrings == null)
-                throw new ArgumentNullException(nameof(connectionStrings));
-
-            this.AppSettings = appSettings;
-            this.ConnectionStrings = connectionStrings;
-        }
-
-        /// <summary>Gets the database connection string to use.</summary>
-        public string ConnectionString { get { return GetConnectionString("Default"); } }
+        public ConfigUtil(NameValueCollection appSettings) => this.AppSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
 
         /// <summary>Indicates whether or not SSL is enabled.</summary>
-        public bool SSLEnabled { get { return GetAppSettingAsBool("SSLEnabled", false); } }
+        public bool SSLEnabled => GetAppSettingAsBool("SSLEnabled", false);
 
         /// <summary>Indicates whether or not cookie (remember me) authentication is enabled.</summary>
-        public bool EnableAuthenticationCookie { get { return GetAppSettingAsBool("EnableAuthenticationCookie", false); } }
+        public bool EnableAuthenticationCookie => GetAppSettingAsBool("EnableAuthenticationCookie", false);
 
         /// <summary>Indicates whether or not email is enabled.</summary>
-        public bool EmailDisabled { get { return GetAppSettingAsBool("EmailDisabled", false); } }
+        public bool EmailDisabled => GetAppSettingAsBool("EmailDisabled", false);
 
         /// <summary>Indicates a testing email to use for all emails sent from the system.</summary>
-        public string OverrideEmailAddress { get { return GetAppSetting("OverrideEmailAddress"); } }
+        public string OverrideEmailAddress => GetAppSetting("OverrideEmailAddress");
 
         /// <summary>The email recipient(s) to whom exceptions should be sent.</summary>
-        public string[] InternalEmailRecipients { get { return GetAppSettingAsStringArray("InternalEmailRecipients", ';'); } }
+        public string[] InternalEmailRecipients => GetAppSettingAsStringArray("InternalEmailRecipients", ';');
 
         /// <summary>The Google Analytics Account Number to use.</summary>
-        public string GoogleAnalyticsAccountNumber { get { return GetAppSetting("GoogleAnalyticsAccountNumber"); } }
+        public string GoogleAnalyticsAccountNumber => GetAppSetting("GoogleAnalyticsAccountNumber");
 
-        public string QCConnectAPIKey { get { return GetAppSetting("QCConnectAPIKey"); } }
-        public string QCConnectAPISecret { get { return GetAppSetting("QCConnectAPISecret"); } }
-        public QCConnectWS.Authorization QCConnectAPIAuthorization { get { return new QCConnectWS.Authorization() { Key = QCConnectAPIKey, Secret = QCConnectAPISecret }; } }
-        public int PageSize { get { return GetAppSettingAsInt("PageSize", 25); } }
+        public string QCConnectAPIKey => GetAppSetting("QCConnectAPIKey");
+        public string QCConnectAPISecret => GetAppSetting("QCConnectAPISecret");
+        public int PageSize => GetAppSettingAsInt("PageSize", 25);
 
         /// <summary>Gets the specified AppSetting as a string.</summary>
         /// <param name="key">The key of the AppSetting to get.</param>
@@ -75,10 +50,12 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting.</returns>
         public string[] GetAppSettingAsStringArray(string key, char delimiter)
         {
-            string value = GetAppSetting(key);
+            var value = GetAppSetting(key);
 
             if (value.IsNullOrEmpty())
+            {
                 return null;
+            }
 
             return value.Split(delimiter);
         }
@@ -88,10 +65,11 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting.</returns>
         public bool? GetAppSettingAsNullableBool(string key)
         {
-            bool value;
 
-            if (bool.TryParse(GetAppSetting(key), out value))
+            if (bool.TryParse(GetAppSetting(key), out var value))
+            {
                 return value;
+            }
 
             return null;
         }
@@ -102,7 +80,7 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting or the default value.</returns>
         public bool GetAppSettingAsBool(string key, bool defaultValue)
         {
-            bool? value = GetAppSettingAsNullableBool(key);
+            var value = GetAppSettingAsNullableBool(key);
 
             return value.GetValueOrDefault(defaultValue);
         }
@@ -112,10 +90,11 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting.</returns>
         public int? GetAppSettingAsNullableInt(string key)
         {
-            int value;
 
-            if (int.TryParse(GetAppSetting(key), out value))
+            if (int.TryParse(GetAppSetting(key), out var value))
+            {
                 return value;
+            }
 
             return null;
         }
@@ -126,7 +105,7 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting or the default value.</returns>
         public int GetAppSettingAsInt(string key, int defaultValue)
         {
-            int? value = GetAppSettingAsNullableInt(key);
+            var value = GetAppSettingAsNullableInt(key);
 
             return value.GetValueOrDefault(defaultValue);
         }
@@ -136,10 +115,11 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting.</returns>
         public decimal? GetAppSettingAsNullableDecimal(string key)
         {
-            decimal value;
 
-            if (decimal.TryParse(GetAppSetting(key), out value))
+            if (decimal.TryParse(GetAppSetting(key), out var value))
+            {
                 return value;
+            }
 
             return null;
         }
@@ -150,7 +130,7 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting or the default value.</returns>
         public decimal GetAppSettingAsDecimal(string key, decimal defaultValue)
         {
-            decimal? value = GetAppSettingAsNullableDecimal(key);
+            var value = GetAppSettingAsNullableDecimal(key);
 
             return value.GetValueOrDefault(defaultValue);
         }
@@ -160,10 +140,11 @@ namespace QuantumConcepts.Common.Utils
         /// <returns>The value of the AppSetting.</returns>
         public DateTime? GetAppSettingAsNullableDateTime(string key)
         {
-            DateTime value;
 
-            if (DateTime.TryParse(GetAppSetting(key), out value))
+            if (DateTime.TryParse(GetAppSetting(key), out DateTime value))
+            {
                 return value;
+            }
 
             return null;
         }
@@ -185,10 +166,11 @@ namespace QuantumConcepts.Common.Utils
         public T? GetAppSettingAsNullableEnum<T>(string key)
             where T : struct
         {
-            T value;
 
-            if (Enum.TryParse<T>(GetAppSetting(key), out value))
+            if (Enum.TryParse<T>(GetAppSetting(key), out T value))
+            {
                 return value;
+            }
 
             return null;
         }
@@ -203,16 +185,6 @@ namespace QuantumConcepts.Common.Utils
             T? value = GetAppSettingAsNullableEnum<T>(key);
 
             return value.GetValueOrDefault(defaultValue);
-        }
-
-        /// <summary>Gets the specified ConnectionString.</summary>
-        /// <param name="key">The key of the ConnectionString to get.</param>
-        /// <returns>The value of the ConnectionString or null.</returns>
-        public string GetConnectionString(string key)
-        {
-            ConnectionStringSettings connectionString = this.ConnectionStrings?[key];
-
-            return (connectionString == null ? null : connectionString.ConnectionString);
         }
     }
 }

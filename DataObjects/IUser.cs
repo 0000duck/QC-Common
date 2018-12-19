@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Linq;
-
-namespace QuantumConcepts.Common.DataObjects {
+﻿namespace QuantumConcepts.Common.DataObjects
+{
     /// <summary>A multi-purpose interface which defines the basic properties of a user.</summary>
     public interface IUser : IDataObject {
         /// <summary>The user's full name.</summary>
